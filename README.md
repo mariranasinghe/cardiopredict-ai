@@ -19,11 +19,7 @@ cardiovascular disease risk. Built with React and powered by gradient boosting a
 - 🩺 Clinical Recommendations
 - ⚠️ Proper Medical Disclaimers
 
-## 🚀 Quick Start
-[Installation and usage instructions]
-
 ## 📖 Documentation
-[Link to detailed documentation]
 
 ## ⚠️ Medical Disclaimer
 This tool is for educational and research purposes only...
