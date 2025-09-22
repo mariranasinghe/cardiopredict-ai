@@ -4,7 +4,6 @@
 
 [![Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](your-demo-link)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
 [![ML](https://img.shields.io/badge/ML-Gradient%20Boosting-orange.svg)](https://scikit-learn.org/)
 
 ## 🩺 Overview
