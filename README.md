@@ -150,7 +150,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS** for beautiful, responsive design utilities
 
 ## 📧 Contact
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/marizza-ranasinghe-424371290/)
+
+- **LinkedIn**: [Marizza Ranasinghe](https://www.linkedin.com/in/marizza-ranasinghe-424371290/)
 
 ## 🔮 Future Enhancements
 
