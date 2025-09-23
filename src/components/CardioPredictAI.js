@@ -19,11 +19,14 @@ import {
   Download,
   AlertTriangle,
   Stethoscope,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 const CardioPredictAI = () => {
   const [activeTab, setActiveTab] = useState("clinical");
   const [predictionResult, setPredictionResult] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [patientData, setPatientData] = useState({
     age: 54,
     sex: 1,
@@ -39,6 +42,27 @@ const CardioPredictAI = () => {
     ca: 0,
     thal: 2,
   });
+
+  // Load theme from localStorage on component mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  // Toggle theme function
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const featureImportance = [
     { feature: "Chest Pain", importance: 23 },
@@ -190,8 +214,14 @@ const CardioPredictAI = () => {
       onClick={() => setActiveTab(id)}
       className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${
         activeTab === id
-          ? "bg-blue-500 text-white"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          ? `${
+              isDarkMode ? "bg-blue-600 text-white" : "bg-blue-500 text-white"
+            }`
+          : `${
+              isDarkMode
+                ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`
       }`}
     >
       <Icon className="w-4 h-4 mr-2" />
@@ -200,18 +230,57 @@ const CardioPredictAI = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-white">
+    <div
+      className={`max-w-7xl mx-auto p-6 transition-colors duration-300 ${
+        isDarkMode ? "bg-gray-900" : "bg-white"
+      }`}
+    >
+      {/* Theme Toggle Button - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={toggleTheme}
+          className={`p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 ${
+            isDarkMode
+              ? "bg-yellow-500 text-gray-900 hover:bg-yellow-400"
+              : "bg-gray-800 text-yellow-400 hover:bg-gray-700"
+          }`}
+          aria-label="Toggle theme"
+        >
+          {isDarkMode ? (
+            <Sun className="w-5 h-5" />
+          ) : (
+            <Moon className="w-5 h-5" />
+          )}
+        </button>
+      </div>
+
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-blue-600 mb-2">
+        <h1
+          className={`text-4xl font-bold mb-2 ${
+            isDarkMode ? "text-blue-400" : "text-blue-600"
+          }`}
+        >
           CardioPredict AI
         </h1>
-        <p className="text-xl text-gray-600 mb-2">
+        <p
+          className={`text-xl mb-2 ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          }`}
+        >
           Intelligent Cardiovascular Risk Assessment Using Machine Learning
         </p>
-        <p className="text-lg text-gray-500 mb-1">
+        <p
+          className={`text-lg mb-1 ${
+            isDarkMode ? "text-gray-400" : "text-gray-500"
+          }`}
+        >
           Advanced Clinical Decision Support System
         </p>
-        <p className="text-md italic text-gray-400">
+        <p
+          className={`text-md italic ${
+            isDarkMode ? "text-gray-500" : "text-gray-400"
+          }`}
+        >
           Developed for Educational & Research Purposes
         </p>
       </div>
@@ -241,12 +310,32 @@ const CardioPredictAI = () => {
 
       {activeTab === "clinical" && (
         <div className="space-y-6">
-          <div className="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-6">
+          <div
+            className={`border rounded-lg p-4 mb-6 ${
+              isDarkMode
+                ? "bg-yellow-900 border-yellow-600"
+                : "bg-yellow-100 border-yellow-400"
+            }`}
+          >
             <div className="flex items-start">
-              <AlertTriangle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
+              <AlertTriangle
+                className={`w-5 h-5 mr-2 mt-0.5 ${
+                  isDarkMode ? "text-yellow-400" : "text-yellow-600"
+                }`}
+              />
               <div>
-                <h3 className="font-semibold text-yellow-800">Disclaimer:</h3>
-                <p className="text-yellow-800">
+                <h3
+                  className={`font-semibold ${
+                    isDarkMode ? "text-yellow-200" : "text-yellow-800"
+                  }`}
+                >
+                  Disclaimer:
+                </h3>
+                <p
+                  className={`${
+                    isDarkMode ? "text-yellow-300" : "text-yellow-800"
+                  }`}
+                >
                   This tool is for educational and research purposes only. It
                   should not be used as a substitute for professional medical
                   advice, diagnosis, or treatment. Always consult qualified
@@ -256,18 +345,36 @@ const CardioPredictAI = () => {
             </div>
           </div>
 
-          <div className="bg-white border rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <div
+            className={`border rounded-lg shadow-sm p-6 ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
+            }`}
+          >
+            <h2
+              className={`text-2xl font-bold mb-4 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               Patient Clinical Data Entry
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p
+              className={`mb-6 ${
+                isDarkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
               Enter patient clinical parameters below. Default values represent
               dataset means for demonstration purposes.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Age (years)
                 </label>
                 <input
@@ -281,13 +388,27 @@ const CardioPredictAI = () => {
                       age: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 />
-                <p className="text-xs text-gray-500 mt-1">Range: 29-79 years</p>
+                <p
+                  className={`text-xs mt-1 ${
+                    isDarkMode ? "text-gray-500" : "text-gray-500"
+                  }`}
+                >
+                  Range: 29-79 years
+                </p>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Biological Sex
                 </label>
                 <select
@@ -298,7 +419,11 @@ const CardioPredictAI = () => {
                       sex: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={1}>Male</option>
                   <option value={0}>Female</option>
@@ -306,7 +431,11 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Chest Pain Type
                 </label>
                 <select
@@ -317,7 +446,11 @@ const CardioPredictAI = () => {
                       cp: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={0}>Typical Angina</option>
                   <option value={1}>Atypical Angina</option>
@@ -327,7 +460,11 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Resting Blood Pressure (mmHg)
                 </label>
                 <input
@@ -341,12 +478,20 @@ const CardioPredictAI = () => {
                       trestbps: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Cholesterol (mg/dl)
                 </label>
                 <input
@@ -360,12 +505,20 @@ const CardioPredictAI = () => {
                       chol: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Fasting Blood Sugar
                 </label>
                 <select
@@ -376,7 +529,11 @@ const CardioPredictAI = () => {
                       fbs: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={0}>≤ 120 mg/dl</option>
                   <option value={1}>> 120 mg/dl</option>
@@ -384,7 +541,39 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  Resting ECG Results
+                </label>
+                <select
+                  value={patientData.restecg}
+                  onChange={(e) =>
+                    setPatientData({
+                      ...patientData,
+                      restecg: parseInt(e.target.value),
+                    })
+                  }
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
+                >
+                  <option value={0}>Normal</option>
+                  <option value={1}>ST-T Wave Abnormality</option>
+                  <option value={2}>Left Ventricular Hypertrophy</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Maximum Heart Rate Achieved
                 </label>
                 <input
@@ -398,12 +587,20 @@ const CardioPredictAI = () => {
                       thalach: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Exercise Induced Angina
                 </label>
                 <select
@@ -414,7 +611,11 @@ const CardioPredictAI = () => {
                       exang: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={0}>No</option>
                   <option value={1}>Yes</option>
@@ -422,7 +623,11 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   ST Depression (oldpeak)
                 </label>
                 <input
@@ -437,12 +642,20 @@ const CardioPredictAI = () => {
                       oldpeak: parseFloat(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Slope of Peak Exercise ST Segment
                 </label>
                 <select
@@ -453,7 +666,11 @@ const CardioPredictAI = () => {
                       slope: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={0}>Downsloping</option>
                   <option value={1}>Flat</option>
@@ -462,7 +679,11 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Number of Major Vessels (0-4)
                 </label>
                 <select
@@ -473,7 +694,11 @@ const CardioPredictAI = () => {
                       ca: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={0}>0</option>
                   <option value={1}>1</option>
@@ -484,7 +709,11 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label
+                  className={`block text-sm font-semibold mb-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Thalassemia Test Result
                 </label>
                 <select
@@ -495,7 +724,11 @@ const CardioPredictAI = () => {
                       thal: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full px-3 py-2 border rounded-md transition-colors ${
+                    isDarkMode
+                      ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
+                      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
+                  }`}
                 >
                   <option value={1}>Fixed Defect</option>
                   <option value={2}>Normal</option>
@@ -507,7 +740,11 @@ const CardioPredictAI = () => {
             <div className="flex gap-3">
               <button
                 onClick={runPrediction}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center"
+                className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center ${
+                  isDarkMode
+                    ? "bg-blue-600 hover:bg-blue-700 text-white"
+                    : "bg-blue-500 hover:bg-blue-600 text-white"
+                }`}
               >
                 <Activity className="w-5 h-5 mr-2" />
                 Run Prediction Analysis
@@ -515,27 +752,47 @@ const CardioPredictAI = () => {
 
               <button
                 onClick={loadRandomCase}
-                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                  isDarkMode
+                    ? "bg-gray-600 hover:bg-gray-700 text-white"
+                    : "bg-gray-600 hover:bg-gray-700 text-white"
+                }`}
               >
                 Load Random Case
               </button>
 
               <button
                 onClick={resetForm}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                className={`px-4 py-3 rounded-lg font-medium transition-colors ${
+                  isDarkMode
+                    ? "bg-gray-500 hover:bg-gray-600 text-white"
+                    : "bg-gray-500 hover:bg-gray-600 text-white"
+                }`}
               >
                 Reset Form
               </button>
             </div>
 
             {predictionResult && (
-              <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              <div
+                className={`mt-8 p-6 rounded-lg ${
+                  isDarkMode ? "bg-gray-700" : "bg-gray-50"
+                }`}
+              >
+                <h3
+                  className={`text-xl font-semibold mb-4 ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Clinical Risk Assessment Results
                 </h3>
 
                 <div className="grid md:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-white p-4 rounded-lg text-center">
+                  <div
+                    className={`p-4 rounded-lg text-center ${
+                      isDarkMode ? "bg-gray-800" : "bg-white"
+                    }`}
+                  >
                     <div
                       className={`text-3xl font-bold mb-1 ${
                         predictionResult.prediction === "High Risk"
@@ -545,45 +802,84 @@ const CardioPredictAI = () => {
                     >
                       {predictionResult.prediction}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div
+                      className={`text-sm ${
+                        isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       Overall Assessment
                     </div>
                   </div>
 
-                  <div className="bg-white p-4 rounded-lg text-center">
+                  <div
+                    className={`p-4 rounded-lg text-center ${
+                      isDarkMode ? "bg-gray-800" : "bg-white"
+                    }`}
+                  >
                     <div className="text-3xl font-bold text-blue-600 mb-1">
                       {(predictionResult.probability * 100).toFixed(0)}%
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div
+                      className={`text-sm ${
+                        isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       Risk Probability
                     </div>
                   </div>
 
-                  <div className="bg-white p-4 rounded-lg text-center">
+                  <div
+                    className={`p-4 rounded-lg text-center ${
+                      isDarkMode ? "bg-gray-800" : "bg-white"
+                    }`}
+                  >
                     <div className="text-3xl font-bold text-purple-600 mb-1">
                       {(predictionResult.confidence * 100).toFixed(0)}%
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div
+                      className={`text-sm ${
+                        isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       Model Confidence
                     </div>
                   </div>
 
-                  <div className="bg-white p-4 rounded-lg text-center">
+                  <div
+                    className={`p-4 rounded-lg text-center ${
+                      isDarkMode ? "bg-gray-800" : "bg-white"
+                    }`}
+                  >
                     <div className="text-3xl font-bold text-orange-600 mb-1">
                       {predictionResult.riskFactors.length}
                     </div>
-                    <div className="text-sm text-gray-600">Risk Factors</div>
+                    <div
+                      className={`text-sm ${
+                        isDarkMode ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
+                      Risk Factors
+                    </div>
                   </div>
                 </div>
 
                 {predictionResult.riskFactors.length > 0 && (
                   <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-2">
+                    <h4
+                      className={`font-semibold mb-2 ${
+                        isDarkMode ? "text-white" : "text-gray-900"
+                      }`}
+                    >
                       Identified Risk Factors:
                     </h4>
                     <ul className="list-disc list-inside space-y-1">
                       {predictionResult.riskFactors.map((factor, index) => (
-                        <li key={index} className="text-gray-700">
+                        <li
+                          key={index}
+                          className={`${
+                            isDarkMode ? "text-gray-300" : "text-gray-700"
+                          }`}
+                        >
                           {factor}
                         </li>
                       ))}
@@ -592,12 +888,21 @@ const CardioPredictAI = () => {
                 )}
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">
+                  <h4
+                    className={`font-semibold mb-2 ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     Clinical Recommendations:
                   </h4>
                   <ul className="list-disc list-inside space-y-1">
                     {predictionResult.recommendations.map((rec, index) => (
-                      <li key={index} className="text-gray-700">
+                      <li
+                        key={index}
+                        className={`${
+                          isDarkMode ? "text-gray-300" : "text-gray-700"
+                        }`}
+                      >
                         {rec}
                       </li>
                     ))}
@@ -611,20 +916,50 @@ const CardioPredictAI = () => {
 
       {activeTab === "performance" && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2
+            className={`text-2xl font-bold mb-4 ${
+              isDarkMode ? "text-white" : "text-gray-900"
+            }`}
+          >
             Model Performance Analysis
           </h2>
 
-          <div className="bg-white p-6 border rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">
+          <div
+            className={`p-6 border rounded-lg shadow-sm ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
+            }`}
+          >
+            <h3
+              className={`text-lg font-semibold mb-4 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               Algorithm Performance Comparison
             </h3>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={modelComparison}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="model" />
-                <YAxis domain={[70, 100]} />
-                <Tooltip formatter={(value) => value + "%"} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke={isDarkMode ? "#374151" : "#e5e7eb"}
+                />
+                <XAxis
+                  dataKey="model"
+                  tick={{ fill: isDarkMode ? "#d1d5db" : "#374151" }}
+                />
+                <YAxis
+                  domain={[70, 100]}
+                  tick={{ fill: isDarkMode ? "#d1d5db" : "#374151" }}
+                />
+                <Tooltip
+                  formatter={(value) => value + "%"}
+                  contentStyle={{
+                    backgroundColor: isDarkMode ? "#1f2937" : "#ffffff",
+                    border: `1px solid ${isDarkMode ? "#374151" : "#e5e7eb"}`,
+                    color: isDarkMode ? "#d1d5db" : "#374151",
+                  }}
+                />
                 <Legend />
                 <Bar dataKey="accuracy" fill="#3b82f6" name="Accuracy (%)" />
                 <Bar dataKey="precision" fill="#10b981" name="Precision (%)" />
@@ -634,39 +969,127 @@ const CardioPredictAI = () => {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
-            <div className="bg-white p-6 border rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-4">Feature Importance</h3>
+            <div
+              className={`p-6 border rounded-lg shadow-sm ${
+                isDarkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              }`}
+            >
+              <h3
+                className={`text-lg font-semibold mb-4 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Feature Importance
+              </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={featureImportance} layout="horizontal">
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
-                  <YAxis dataKey="feature" type="category" width={100} />
-                  <Tooltip formatter={(value) => value + "%"} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={isDarkMode ? "#374151" : "#e5e7eb"}
+                  />
+                  <XAxis
+                    type="number"
+                    tick={{ fill: isDarkMode ? "#d1d5db" : "#374151" }}
+                  />
+                  <YAxis
+                    dataKey="feature"
+                    type="category"
+                    width={100}
+                    tick={{ fill: isDarkMode ? "#d1d5db" : "#374151" }}
+                  />
+                  <Tooltip
+                    formatter={(value) => value + "%"}
+                    contentStyle={{
+                      backgroundColor: isDarkMode ? "#1f2937" : "#ffffff",
+                      border: `1px solid ${isDarkMode ? "#374151" : "#e5e7eb"}`,
+                      color: isDarkMode ? "#d1d5db" : "#374151",
+                    }}
+                  />
                   <Bar dataKey="importance" fill="#ef4444" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold text-green-900 mb-4">
+            <div
+              className={`p-6 rounded-lg ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-green-900 to-emerald-900"
+                  : "bg-gradient-to-r from-green-50 to-emerald-50"
+              }`}
+            >
+              <h3
+                className={`text-lg font-semibold mb-4 ${
+                  isDarkMode ? "text-green-200" : "text-green-900"
+                }`}
+              >
                 Best Model: Gradient Boosting
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-800">91%</div>
-                  <div className="text-sm text-green-600">Accuracy</div>
+                  <div
+                    className={`text-2xl font-bold ${
+                      isDarkMode ? "text-green-300" : "text-green-800"
+                    }`}
+                  >
+                    91%
+                  </div>
+                  <div
+                    className={`text-sm ${
+                      isDarkMode ? "text-green-400" : "text-green-600"
+                    }`}
+                  >
+                    Accuracy
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-800">90%</div>
-                  <div className="text-sm text-green-600">Precision</div>
+                  <div
+                    className={`text-2xl font-bold ${
+                      isDarkMode ? "text-green-300" : "text-green-800"
+                    }`}
+                  >
+                    90%
+                  </div>
+                  <div
+                    className={`text-sm ${
+                      isDarkMode ? "text-green-400" : "text-green-600"
+                    }`}
+                  >
+                    Precision
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-800">93%</div>
-                  <div className="text-sm text-green-600">Recall</div>
+                  <div
+                    className={`text-2xl font-bold ${
+                      isDarkMode ? "text-green-300" : "text-green-800"
+                    }`}
+                  >
+                    93%
+                  </div>
+                  <div
+                    className={`text-sm ${
+                      isDarkMode ? "text-green-400" : "text-green-600"
+                    }`}
+                  >
+                    Recall
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-800">94%</div>
-                  <div className="text-sm text-green-600">AUC</div>
+                  <div
+                    className={`text-2xl font-bold ${
+                      isDarkMode ? "text-green-300" : "text-green-800"
+                    }`}
+                  >
+                    94%
+                  </div>
+                  <div
+                    className={`text-sm ${
+                      isDarkMode ? "text-green-400" : "text-green-600"
+                    }`}
+                  >
+                    AUC
+                  </div>
                 </div>
               </div>
             </div>
@@ -676,15 +1099,33 @@ const CardioPredictAI = () => {
 
       {activeTab === "methodology" && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2
+            className={`text-2xl font-bold mb-4 ${
+              isDarkMode ? "text-white" : "text-gray-900"
+            }`}
+          >
             Research Methodology
           </h2>
 
-          <div className="bg-white p-8 border rounded-lg shadow-sm">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <div
+            className={`p-8 border rounded-lg shadow-sm ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
+            }`}
+          >
+            <h3
+              className={`text-xl font-bold mb-4 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               Dataset Overview
             </h3>
-            <p className="text-gray-700 mb-6">
+            <p
+              className={`mb-6 ${
+                isDarkMode ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               This study utilizes the Cleveland Heart Disease dataset from the
               UCI Machine Learning Repository, containing 303 patient records
               with 13 clinical features and a binary target variable indicating
@@ -693,10 +1134,18 @@ const CardioPredictAI = () => {
 
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-3">
+                <h4
+                  className={`font-semibold mb-3 ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Data Preprocessing Steps
                 </h4>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                <ul
+                  className={`list-disc list-inside space-y-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   <li>Missing value handling through deletion</li>
                   <li>Feature scaling using StandardScaler</li>
                   <li>Target variable binarization</li>
@@ -706,10 +1155,18 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-3">
+                <h4
+                  className={`font-semibold mb-3 ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Feature Engineering
                 </h4>
-                <ul className="list-disc list-inside space-y-2 text-gray-700">
+                <ul
+                  className={`list-disc list-inside space-y-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   <li>Age group categorization</li>
                   <li>Cholesterol risk stratification</li>
                   <li>Heart rate reserve calculation</li>
@@ -719,10 +1176,14 @@ const CardioPredictAI = () => {
               </div>
             </div>
 
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <h3
+              className={`text-xl font-bold mb-4 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               Machine Learning Pipeline
             </h3>
-            <p className="text-gray-700">
+            <p className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
               Four different classification algorithms were implemented and
               compared: Logistic Regression (baseline), Support Vector Machine,
               Random Forest, and Gradient Boosting. Each model was trained using
@@ -734,21 +1195,43 @@ const CardioPredictAI = () => {
 
       {activeTab === "validation" && (
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2
+            className={`text-2xl font-bold mb-4 ${
+              isDarkMode ? "text-white" : "text-gray-900"
+            }`}
+          >
             Literature Validation
           </h2>
 
-          <div className="bg-white p-8 border rounded-lg shadow-sm">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <div
+            className={`p-8 border rounded-lg shadow-sm ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
+            }`}
+          >
+            <h3
+              className={`text-xl font-bold mb-4 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
               Clinical Evidence Base
             </h3>
 
             <div className="space-y-6">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
+                <h4
+                  className={`font-semibold mb-2 ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Key Risk Factors Validated
                 </h4>
-                <p className="text-gray-700">
+                <p
+                  className={`${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   The model's identification of chest pain type, age, and
                   maximum heart rate as primary predictors aligns with
                   established cardiovascular risk assessment guidelines from the
@@ -757,10 +1240,18 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
+                <h4
+                  className={`font-semibold mb-2 ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Performance Benchmarking
                 </h4>
-                <p className="text-gray-700">
+                <p
+                  className={`${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   The achieved 91% accuracy compares favorably with published
                   studies using similar datasets and methodologies,
                   demonstrating the robustness of the gradient boosting approach
@@ -769,10 +1260,18 @@ const CardioPredictAI = () => {
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
+                <h4
+                  className={`font-semibold mb-2 ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   Clinical Utility
                 </h4>
-                <p className="text-gray-700">
+                <p
+                  className={`${
+                    isDarkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   The high recall (93%) ensures minimal missed cases of heart
                   disease, which is clinically important for patient safety. The
                   model provides interpretable results that can support clinical
