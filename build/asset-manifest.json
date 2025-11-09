@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/mariranasinghe/cardiopredict-ai/static/css/main.07859104.css",
+    "main.js": "/mariranasinghe/cardiopredict-ai/static/js/main.f75fcc12.js",
+    "index.html": "/mariranasinghe/cardiopredict-ai/index.html",
+    "main.07859104.css.map": "/mariranasinghe/cardiopredict-ai/static/css/main.07859104.css.map",
+    "main.f75fcc12.js.map": "/mariranasinghe/cardiopredict-ai/static/js/main.f75fcc12.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.07859104.css",
+    "static/js/main.f75fcc12.js"
+  ]
+}

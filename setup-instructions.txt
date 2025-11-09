@@ -1,0 +1,173 @@
+🚀 Setup Instructions for CardioPredict AI
+
+Follow these steps to get CardioPredict AI running on your local machine.
+
+📋 Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- Node.js (version 14.0 or higher)
+  - Download from [nodejs.org](https://nodejs.org/)
+  - Verify installation: `node --version`
+- npm (comes with Node.js) or yarn
+  - Verify npm: `npm --version`
+
+📁 File Structure
+
+Create the following folder structure:
+
+```
+cardiopredict-ai/
+├── public/
+│   ├── index.html
+│   └── manifest.json
+├── src/
+│   ├── components/
+│   │   └── CardioPredictAI.js
+│   ├── App.js
+│   ├── App.css
+│   ├── index.js
+│   └── index.css
+├── .gitignore
+├── LICENSE
+├── README.md
+├── SETUP_INSTRUCTIONS.md
+└── package.json
+```
+
+🛠️ Installation Steps
+
+Step 1: Create Project Directory
+```bash
+mkdir cardiopredict-ai
+cd cardiopredict-ai
+```
+
+Step 2: Create All Files
+Copy the provided files into their respective locations according to the file structure above.
+
+### Step 3: Install Dependencies
+```bash
+npm install
+```
+
+This will install all the required packages:
+- React 18
+- Recharts (for data visualization)
+- Lucide React (for icons)
+- React Scripts (for development tools)
+
+Step 4: Start Development Server
+```bash
+npm start
+```
+
+The application will open automatically in your browser at `http://localhost:3000`
+
+🔧 Troubleshooting
+
+Common Issues:
+
+1. Port 3000 already in use**
+```bash
+Kill the process using port 3000
+npx kill-port 3000
+Or start on a different port
+PORT=3001 npm start
+```
+
+2. Node version too old**
+```bash
+Check your Node version
+node --version
+Update Node.js from nodejs.org if version is below 14.0
+```
+
+**3. Package installation fails**
+```bash
+# Clear npm cache
+npm cache clean --force
+# Delete node_modules and package-lock.json
+rm -rf node_modules package-lock.json
+# Reinstall
+npm install
+```
+
+**4. Tailwind CSS not loading**
+- Make sure the Tailwind CDN is included in `public/index.html`
+- Check browser console for any script loading errors
+
+## 📱 Testing the Application
+
+Once running, you should see:
+
+1. **CardioPredict AI** header with beautiful gradient background
+2. **Four navigation tabs**: Clinical Tool, Model Performance, Research Methodology, Literature Validation
+3. **Interactive form** with 13 clinical parameters
+4. **Working charts** showing model performance and feature importance
+5. **Responsive design** that works on different screen sizes
+
+### Test the Clinical Tool:
+1. Enter patient data in the form
+2. Click "Run Prediction Analysis"
+3. Review the risk assessment results
+4. Try "Load Random Case" for sample data
+
+## 🚀 Building for Production
+
+```bash
+npm run build
+```
+
+This creates a `build/` folder with optimized production files.
+
+## 📦 Deployment Options
+
+### Deploy to Netlify:
+1. Build the project: `npm run build`
+2. Drag the `build/` folder to [netlify.com/drop](https://netlify.com/drop)
+
+### Deploy to Vercel:
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run: `vercel`
+3. Follow the prompts
+
+### Deploy to GitHub Pages:
+```bash
+npm install --save-dev gh-pages
+# Add to package.json scripts: "deploy": "gh-pages -d build"
+npm run build
+npm run deploy
+```
+
+## 🎯 Next Steps
+
+After successful setup:
+
+1. **Customize the data**: Add your own patient cases
+2. **Enhance the UI**: Modify colors, layouts, or add new features
+3. **Add new models**: Implement additional ML algorithms
+4. **Extend functionality**: Add data export, printing, or reporting features
+5. **Improve accessibility**: Add ARIA labels and keyboard navigation
+
+📞 Support
+
+If you encounter any issues:
+
+1. Check the browser console for error messages
+2. Verify all files are in the correct locations
+3. Ensure all dependencies are installed
+4. Check that Node.js version is 14+
+5. Try clearing browser cache and hard refresh
+
+🎉 Success!
+
+If everything is working correctly, you should have a fully functional CardioPredict AI application with:
+
+- ✅ Interactive clinical prediction tool
+- ✅ Beautiful data visualizations
+- ✅ Responsive design
+- ✅ Professional medical disclaimers
+- ✅ Comprehensive model performance analysis
+
+Enjoy exploring cardiovascular risk assessment with AI! 🫀
